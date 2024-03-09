@@ -37,7 +37,8 @@ private:
 	}
 
 	// the only other test i can think of are testing our translate method, but i have no
-	// data about how that is suposed to behave.
+	// data about how that is suposed to behave so any test would just rewrite the method
+	// which wouldent acomplish anything.
 
 	// my parner did not provide code for his tests, he only provided a txt file explaning them.
 	// ive traslated his tests to code best i can, but he didnt include any data.
