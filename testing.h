@@ -6,6 +6,7 @@
 #include "Satalite.h"
 #include "Part.h"
 
+
 class testing
 {
 public:
@@ -101,7 +102,7 @@ private:
 		chaser = DreamChaser();
 		// the above object should have some velocity and position, but none were spesified.
 
-		chaser.animtate();
+		chaser.animate(0);
 
 		
 		// Expected Output: A Projectile object should be launched 

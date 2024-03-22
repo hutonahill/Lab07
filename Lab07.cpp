@@ -99,7 +99,7 @@ void callBack(const Interface* pUI, void* p)
        var->animate(timePerFrame);
    }
    
-
+   // would love to randomize this.
    // draw a single star
    pDemo->gout->drawStar(pDemo->ptStar, pDemo->phaseStar);
 

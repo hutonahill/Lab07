@@ -5,7 +5,6 @@
 
 #include "Angle.h"
 #include "position.h"
-#include "Part.h"
 #include "Velocity.h"
 #include "uiDraw.h"
 
@@ -29,6 +28,11 @@ protected:
 
 	double horazantalComponant(double total, Angle angle);
 	double verticalComponant(double total, Angle angle);
+	double getGravityAccelerationMagnatude(Position location);
+	Angle getGravityAngle(Position location);
+	double newPosition(double initalPosition, double velocity, double time, double acceleration);
+	double newVelocity(double initalVeloctiy, double acceleration, double time);
+	double getAcceleration(double force, double mass);
 public:
 	virtual bool animate(double time);
 

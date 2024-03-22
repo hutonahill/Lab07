@@ -57,7 +57,7 @@ void Object::translate(double time) {
 	location.setMetersY(newYPos);
 }
 
-double getGravityAccelerationMagnatude(Position location) {
+double Object::getGravityAccelerationMagnatude(Position location) {
 	double distanceToCenter = computeDistance(location, Position(0, 0));
 
 	double altitude = distanceToCenter - earthRadiusKm*1000;
@@ -70,7 +70,7 @@ double getGravityAccelerationMagnatude(Position location) {
 
 }
 
-Angle getGravityAngle(Position location) {
+Angle Object::getGravityAngle(Position location) {
 	double resultRadians = atan2(-location.getMetersY(), -location.getMetersX());
 
 	Angle output = Angle(resultRadians);
@@ -86,20 +86,20 @@ double Object::verticalComponant(double total, Angle angle) {
 
 }
 
-double newPosition(double initalPosition, double velocity, double time, double acceleration){
+double Object::newPosition(double initalPosition, double velocity, double time, double acceleration){
 	double statment2 = velocity * time;
 	double statment3 = 0.5 * acceleration * time * time;
 
 	return initalPosition + statment2 + statment3;
 }
 
-double newVelocity(double initalVeloctiy, double acceleration, double time) {
+double Object::newVelocity(double initalVeloctiy, double acceleration, double time) {
 	double addtionalVelocity = acceleration * time;
 
 	return initalVeloctiy + addtionalVelocity;
 }
 
-double getAcceleration(double force, double mass) {
+double Object::getAcceleration(double force, double mass) {
 	return force / mass;
 }
 
