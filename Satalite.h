@@ -4,7 +4,7 @@
 class Satalite : public Object
 {
 private:
-	function<void(const Position&, double)> draw;
+	function<void(const Position&, double)> draw = function<void(const Position&, double)>();
 	
 public:
 	Satalite();

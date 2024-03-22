@@ -1,6 +1,9 @@
 #pragma once
 #include <cassert>
 #include <vector>
+#include <functional>
+#include <stdexcept>
+
 #include "DreamChaser.h"
 #include "Object.h"
 #include "Satalite.h"
@@ -10,8 +13,9 @@
 class testing
 {
 public:
-	testing() {
-		chaser = DreamChaser();
+	testing(function<void(Object*, vector<Object*>*)> colissionInput) {
+		chaser = new DreamChaser();
+		handleColission = colissionInput;
 		test1();
 		test2();
 		test2();
@@ -23,14 +27,17 @@ public:
 		test9();
 		test10();
 		test11();
+		
 	}
 
 
 private:
 	// Evan Riker
 
+	function<void(Object*, vector<Object*>*)> handleColission = function<void(Object*, vector<Object*>*)>();
+
 	void test1() {
-		vector<Object*> ObjectList = vector<Object*>();
+		vector<Object*>* ObjectList = new vector<Object*>();
 
 		Position pt;
 		ogstream gout(pt);
@@ -59,14 +66,21 @@ private:
 
 		Object* testObject = new Satalite("Hubble", Angle(), Position(0, -42164000), Velocity(3100, 0), 0, hubbleParts, boundDrawHubble, 10);
 
-		ObjectList.push_back(testObject);
+		ObjectList->push_back(testObject);
 
-		assert(ObjectList.size() == 1);
+		assert(ObjectList->size() == 1);
 
-		// need to figure out how to call my colission handler.
-		testObject.handelColision(ObjectList);
 
-		assert(ObjectList.size() == testObject->getParts().size());
+		handleColission(testObject, ObjectList);
+
+		int testPartsSize = testObject->getParts().size() + testObject->getNumFragments();
+		int objectSize = ObjectList->size();
+		
+
+		if (objectSize != testPartsSize) {
+			throw runtime_error("objectListSize and Part size dont match.");
+		}
+
 	}
 
 	// the only other test i can think of are testing our translate method, but i have no
@@ -76,7 +90,7 @@ private:
 	// my parner did not provide code for his tests, he only provided a txt file explaning them.
 	// ive traslated his tests to code best i can, but he didnt include any data.
 
-	DreamChaser chaser;
+	DreamChaser* chaser;
 
 	//Update position and velocity:
 	void test2() {
@@ -85,11 +99,24 @@ private:
 		bool rightKeyPressed = false;
 		bool upKeyPressed = true;
 
+		vector<Object*>* objectList = new vector<Object*>;
+
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+
 		
 		// need to figure out how to cheese user input.
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
 
-		chaser.animate(deltaTime);
+		chaser->animate(deltaTime);
 
 		// Expected Output: DreamChaser's position and velocity should be 
 		// updated accordingly.
@@ -99,10 +126,21 @@ private:
 
 	// Launch projectile:
 	void test3() {
-		chaser = DreamChaser();
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		vector<Object*>* objectList = new vector<Object*>;
+
+		
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
 		// the above object should have some velocity and position, but none were spesified.
 
-		chaser.animate(0);
+		chaser->animate(0);
 
 		
 		// Expected Output: A Projectile object should be launched 
@@ -119,9 +157,22 @@ private:
 		bool rightKeyPressed = false;
 		bool upKeyPressed = false;
 
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		vector<Object*>* objectList = new vector<Object*>;
 
-		chaser.animate(deltaTime);
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+		// need to figure out how to cheese user input.
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
+
+		chaser->animate(deltaTime);
 
 		// Expected Output : DreamChaser's position and velocity should remain unchanged.
 
@@ -135,9 +186,22 @@ private:
 		bool rightKeyPressed = false;
 		bool upKeyPressed = true;
 
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		vector<Object*>* objectList = new vector<Object*>;
 
-		chaser.animate(deltaTime);
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+		// need to figure out how to cheese user input.
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
+
+		chaser->animate(deltaTime);
 
 		//Expected Output: DreamChaser should accelerate in the direction it is facing.
 
@@ -149,7 +213,19 @@ private:
 		bool deltaTime = 10.0;
 		// other inputs according to test scenario
 
-		chaser.animate(deltaTime);
+		vector<Object*>* objectList = new vector<Object*>;
+
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+		chaser->animate(deltaTime);
 
 		//Expected Output: Objects' positions should be updated 
 		// correctly even with a large time step.
@@ -162,9 +238,23 @@ private:
 		bool rightKeyPressed = false;
 		bool upKeyPressed = true;
 
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		vector<Object*>* objectList = new vector<Object*>;
 
-		chaser.animate(deltaTime);
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+
+		// need to figure out how to cheese user input.
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
+
+		chaser->animate(deltaTime);
 
 		// Expected Output: DreamChaser should handle 
 		// corner cases gracefully without unexpected behavior.
@@ -185,12 +275,28 @@ private:
 		bool rightKeyPressed = true;
 		bool upKeyPressed = true;
 
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		vector<Object*>* objectList = new vector<Object*>;
 
-		chaser.animate(deltaTime);
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+
+		// need to figure out how to cheese user input.
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
+
+		chaser->animate(deltaTime);
 
 		// Expected Output: DreamChaser should respond appropriately to multiple key presses, 
 		// possibly by combining the effects of each key press.
+
+		// no data was provided to verify the results
 	}
 	
 	//No key press :
@@ -200,9 +306,24 @@ private:
 		bool rightKeyPressed = false;
 		bool upKeyPressed = false;
 
-		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
+		vector<Object*>* objectList = new vector<Object*>;
 
-		chaser.animate(deltaTime);
+		Position pt;
+		ogstream gout(pt);
+
+		ogstream* goutPointer = &gout;
+
+		auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+		chaser = new DreamChaser(Position(), Angle(), Velocity(),
+			objectList, boundDrawShip, 10);
+
+		// need to figure out how to cheese user input.
+		chaser->handleUserInput(objectList, goutPointer, upKeyPressed, false, leftKeyPressed, rightKeyPressed);
+
+		chaser->animate(deltaTime);
+
+		// no data was provided to verify the results
 	}
 
 	// Test Cases for Projectile Class:
@@ -211,12 +332,22 @@ private:
 	void test11() {
 		double deltaTime = 0.1;
 
-		Bullet bullet = Bullet();
+		Position pt;
+		ogstream gout(pt);
 
-		bullet.animate(deltaTime);
+		ogstream* goutPointer = &gout;
 
-		//Expected Output : The position of the projectile 
+		auto boundDrawProjectile = bind(&ogstream::drawProjectile, goutPointer, placeholders::_1, placeholders::_2);
+
+		TempObject Bullet("Bullet", Angle(), Position(), Velocity(), boundDrawProjectile, 2880, 1);
+
+
+		Bullet.animate(deltaTime);
+
+		// Expected Output : The position of the projectile 
 		// should be updated based on its initial position and velocity.
+
+		// no data was provided to verify the results
 	}
 
 };

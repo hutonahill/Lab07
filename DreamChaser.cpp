@@ -30,24 +30,29 @@ DreamChaser::DreamChaser(DreamChaser* oldChaser) {
 }
 
 void DreamChaser::handleUserInput(vector<Object*>* ObjectList, const Interface* pUI, ogstream* ui){
-	if (pUI->isDown()) {
+	handleUserInput(ObjectList, ui, pUI->isUp(), pUI->isDown(), pUI->isLeft(), pUI->isRight());
+}
+
+void DreamChaser::handleUserInput(vector<Object*>* ObjectList, ogstream* ui, 
+	bool up, bool down, bool left, bool right) {
+	if (down) {
 		isThrusting = true;
 		xAcceleration += horazantalComponant(thrustAcceleration, angle);
 		yAcceleration += verticalComponant(thrustAcceleration, angle);
 	}
-	else{
+	else {
 		isThrusting = false;
 	}
 
-	if (pUI->isRight() && pUI->isLeft()) {}
-	else if (pUI->isRight()) {
+	if (right && left) {}
+	else if (right) {
 		angle.setRadians(angle.getRadians() + 0.1);
 	}
-	else if (pUI->isLeft()) {
+	else if (left) {
 		angle.setRadians(angle.getRadians() - 0.1);
 	}
 
-	if (pUI->isUp()) {
+	if (up) {
 		(*ObjectList).push_back(generateBullet(ui));
 	}
 }
@@ -58,7 +63,7 @@ TempObject* DreamChaser::generateBullet(ogstream* ui) {
 
 	auto boundDrawProjectile = bind(&ogstream::drawProjectile, ui, placeholders::_1, placeholders::_2);
 
-	TempObject tempObject("Bullet", angle, ptShipFrount, objectVelocity, boundDrawProjectile, 2880, 1);
+	TempObject tempObject = TempObject("Bullet", angle, ptShipFrount, objectVelocity, boundDrawProjectile, 2880, 1);
 	return &tempObject;
 }
 

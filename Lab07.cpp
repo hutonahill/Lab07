@@ -23,6 +23,7 @@
 #include "Satalite.h"
 #include "DreamChaser.h"
 #include "Part.h"
+#include "testing.h"
 using namespace std;
 
 vector<Object*> ObjectList;
@@ -226,7 +227,7 @@ void HandleColission(Object* targetObject, vector<Object*>* ObjectList) {
 
         // handle fragments
         for (int i = 0; i < targetObject->getNumFragments(); i++){
-            TempObject* newFragment = &TempObject(basicFragment);
+            TempObject* newFragment = new TempObject(basicFragment);
 
             HandleOffset(targetObject, newFragment);
 
@@ -259,6 +260,13 @@ int main(int argc, char** argv)
     Interface ui(0, NULL,
         "Demo",   /* name on the window */
         ptUpperRight);
+
+    auto boundHandleColission = [](Object* targetObject, vector<Object*>* ObjectList) {
+        HandleColission(targetObject, ObjectList);
+    };
+
+    testing newTest(boundHandleColission);
+
 
     Position pt;
     ogstream gout(pt);
@@ -323,41 +331,39 @@ int main(int argc, char** argv)
     };
 
     vector<Object*> MasterObjectList = vector<Object*>{
-         new Satalite("Sputnik", Angle(), Position(-36515095.13, 21082000.0), Velocity(2050, 2684.68), 4, vector<Part*>(), boundDrawSputnik, 4),
+        new Satalite("Sputnik", Angle(), Position(-36515095.13, 21082000.0), Velocity(2050, 2684.68), 4, vector<Part*>(), boundDrawSputnik, 4),
 
-         generateGPS(Position(0, 26560000), Velocity(-3880, 0), goutPointer),
-         generateGPS(Position(0, -26560000), Velocity(3880, 0), goutPointer),
-         generateGPS(Position(23001634.72, 13280000), Velocity(-1940, 3360.18), goutPointer),
-         generateGPS(Position(23001634.72, -13280000), Velocity(1940, 3360.18), goutPointer),
-         generateGPS(Position(-23001634.72, -13280000), Velocity(1940, -3360.18), goutPointer),
-         generateGPS(Position(-23001634.72, 13280000), Velocity(-1940, -3360.18), goutPointer),
-
-
-         new Satalite("Hubble", Angle(), Position(0, -42164000), Velocity(3100, 0), 0, hubbleParts, boundDrawHubble, 10),
-
-         new Satalite("Dragon", Angle(), Position(0, 8000000), Velocity(-7900, 0), 2, DragonParts, boundDrawDragon, 7),
-
-         new Satalite("StarLink", Angle(), Position(0, 13020000), Velocity(5800, 0), 2, starLinkParts, boundDrawStarlink, 6)
-   };
-
-   
-
-   //auto boundDrawShip = bind(&ogstream::drawShip, uiPointer, placeholders::_1, placeholders::_2);
-   auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+        generateGPS(Position(0, 26560000), Velocity(-3880, 0), goutPointer),
+        generateGPS(Position(0, -26560000), Velocity(3880, 0), goutPointer),
+        generateGPS(Position(23001634.72, 13280000), Velocity(-1940, 3360.18), goutPointer),
+        generateGPS(Position(23001634.72, -13280000), Velocity(1940, 3360.18), goutPointer),
+        generateGPS(Position(-23001634.72, -13280000), Velocity(1940, -3360.18), goutPointer),
+        generateGPS(Position(-23001634.72, 13280000), Velocity(-1940, -3360.18), goutPointer),
 
 
+        new Satalite("Hubble", Angle(), Position(0, -42164000), Velocity(3100, 0), 0, hubbleParts, boundDrawHubble, 10),
 
-   DreamChaser* chaser = new DreamChaser(Position(-450, 450, true), Angle(), Velocity(0, -2),
-       &MasterObjectList, boundDrawShip, 10);
+        new Satalite("Dragon", Angle(), Position(0, 8000000), Velocity(-7900, 0), 2, DragonParts, boundDrawDragon, 7),
 
-   // Initialize the demo
-   Demo demo(ptUpperRight, &MasterObjectList, chaser, &gout);
+        new Satalite("StarLink", Angle(), Position(0, 13020000), Velocity(5800, 0), 2, starLinkParts, boundDrawStarlink, 6)
+    };
+
+    
+    //auto boundDrawShip = bind(&ogstream::drawShip, uiPointer, placeholders::_1, placeholders::_2);
+    auto boundDrawShip = bind(&ogstream::drawShip, &gout, placeholders::_1, placeholders::_2, placeholders::_3);
+
+    DreamChaser* chaser = new DreamChaser(Position(-450, 450, true), Angle(), Velocity(0, -2),
+        &MasterObjectList, boundDrawShip, 10);
+
+    // Initialize the demo
+    Demo demo(ptUpperRight, &MasterObjectList, chaser, &gout);
+
 
   
 
-   // set everything into action
-   ui.run(callBack, &demo);
+    // set everything into action
+    ui.run(callBack, &demo);
 
 
-   return 0;
+    return 0;
 }

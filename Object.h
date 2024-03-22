@@ -34,7 +34,7 @@ protected:
 	double newVelocity(double initalVeloctiy, double acceleration, double time);
 	double getAcceleration(double force, double mass);
 public:
-	virtual bool animate(double time);
+	virtual bool animate(double time) = 0;
 
 	double xAcceleration = 0;
 	double yAcceleration = 0;
