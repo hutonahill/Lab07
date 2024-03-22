@@ -1,5 +1,11 @@
 #pragma once
 #include <cassert>
+#include <vector>
+#include "DreamChaser.h"
+#include "Object.h"
+#include "Satalite.h"
+#include "Part.h"
+
 class testing
 {
 public:
@@ -23,17 +29,43 @@ private:
 	// Evan Riker
 
 	void test1() {
-		List<Object*> ObjectList = List<Object*>();
+		vector<Object*> ObjectList = vector<Object*>();
 
-		Object* testObject = new GPSSatellite();
+		Position pt;
+		ogstream gout(pt);
 
-		ObjectList.append(testObject);
+		ogstream* goutPointer = &gout;
 
-		assert(ObjectList.count == 1);
+		auto boundDrawHubble = bind(&ogstream::drawHubble, goutPointer, placeholders::_1, placeholders::_2);
+		auto DrawHubbleTelescope = [goutPointer](const Position& center, double rotation) {
+			goutPointer->drawHubbleTelescope(center, rotation);
+			};
+		auto DrawHubbleComputer = [goutPointer](const Position& center, double rotation) {
+			goutPointer->drawHubbleComputer(center, rotation);
+			};
+		auto DrawHubbleRight = [goutPointer](const Position& center, double rotation) {
+			goutPointer->drawHubbleRight(center, rotation);
+			};
+		auto DrawHubbleLeft = [goutPointer](const Position& center, double rotation) {
+			goutPointer->drawHubbleLeft(center, rotation);
+			};
+		vector<Part*> hubbleParts = vector<Part*>{
+			new Part("HubbleTelescope", 3, DrawHubbleTelescope, 10),
+			new Part("HubbleComputer", 2, DrawHubbleComputer, 7),
+			new Part("HubbleRight", 2, DrawHubbleRight, 8),
+			new Part("HubbleLeft", 2, DrawHubbleLeft, 8)
+		};
 
+		Object* testObject = new Satalite("Hubble", Angle(), Position(0, -42164000), Velocity(3100, 0), 0, hubbleParts, boundDrawHubble, 10);
+
+		ObjectList.push_back(testObject);
+
+		assert(ObjectList.size() == 1);
+
+		// need to figure out how to call my colission handler.
 		testObject.handelColision(ObjectList);
 
-		assert(ObjectList.count == testObject.parts.count);
+		assert(ObjectList.size() == testObject->getParts().size());
 	}
 
 	// the only other test i can think of are testing our translate method, but i have no
@@ -53,7 +85,7 @@ private:
 		bool upKeyPressed = true;
 
 		
-
+		// need to figure out how to cheese user input.
 		chaser.handleUserInput(leftKeyPressed, rightKeyPressed, upKeyPressed);
 
 		chaser.animate(deltaTime);

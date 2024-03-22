@@ -17,6 +17,12 @@ Position::Position(double x, double y) : x(0.0), y(0.0)
    setMetersY(y);
 }
 
+Position::Position(double x, double y, bool isPx) : x(0.0), y(0.0)
+{
+	setPixelsX(x);
+	setPixelsY(y);
+}
+
 /******************************************
  * POINT : ASSIGNMENT
  * Assign a point

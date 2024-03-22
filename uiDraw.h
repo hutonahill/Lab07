@@ -47,7 +47,7 @@ public:
 
    // This is specific to the orbit simulator
    virtual void drawFragment(const Position& center, double rotation);
-   virtual void drawProjectile(const Position& pt);
+   virtual void drawProjectile(const Position& pt, double);
 
    virtual void drawCrewDragon(const Position& center, double rotation);
    virtual void drawCrewDragonRight(const Position& center, double rotation, const Position& offset = Position());

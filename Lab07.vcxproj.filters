@@ -33,6 +33,27 @@
     <ClCompile Include="testing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Velocity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Satalite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TempObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Part.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Angle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DreamChaser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
@@ -51,6 +72,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Velocity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Satalite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TempObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Part.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Angle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamChaser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

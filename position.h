@@ -30,6 +30,7 @@ public:
    // constructors
    Position()            : x(0.0), y(0.0)  {}
    Position(double x, double y);
+   Position(double x, double y, bool isPx);
    Position(const Position & pt) : x(pt.x), y(pt.y) {}
    Position& operator = (const Position& pt);
 

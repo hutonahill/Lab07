@@ -209,7 +209,7 @@ void ogstream :: flush()
  * Draw a projectile on the screen at a given point.
  *   INPUT  pt     The location of the projectile
  *************************************************************************/
-void ogstream::drawProjectile(const Position& pt)
+void ogstream::drawProjectile(const Position& pt, double)
 {
    ColorRect rects[] =
    {
